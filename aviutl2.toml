@@ -1,0 +1,17 @@
+#:schema ./.aviutl2-cli/aviutl2.schema.json
+# 設定ファイルについては https://github.com/sevenc-nanashi/aviutl2-cli を参照してください。
+[project]
+id = "pexisgle_script"
+name = "pexisgle-script"
+version = "0.1.0"
+
+[development]
+aviutl2_version = "latest"
+
+[artifacts.t_script-anm2]
+destination = "Script/pexisgle/ランダム色で登場.anm2"
+source = "src/ランダム色で登場.lua"
+
+[artifacts.random_placement-anm2]
+destination = "Script/pexisgle/個別オブジェクトランダム配置.anm2"
+source = "src/個別オブジェクトランダム配置.lua"
