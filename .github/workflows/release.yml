@@ -1,0 +1,41 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to release"
+        required: true
+
+jobs:
+  release:
+    runs-on: windows-latest
+    environment: publish
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-binstall
+
+      - uses: jdx/mise-action@v4
+        with:
+          install: true
+          experimental: true
+
+      - name: Prepare release
+        shell: bash
+        run: |
+          mkdir -p release
+          au2 release --set-version "${{ github.event.inputs.version }}"
+
+      - uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ github.event.inputs.version }}
+          body: |
+            `pexisgle_script-v${{ github.event.inputs.version }}.au2pkg.zip` をダウンロードし、AviUtl2 のプレビューにドラッグ&ドロップしてください。
+          files: |
+            ./release/pexisgle_script-v*.au2pkg.zip

@@ -15,3 +15,6 @@ source = "src/ランダム色で登場.lua"
 [artifacts.random_placement-anm2]
 destination = "Script/pexisgle/個別オブジェクトランダム配置.anm2"
 source = "src/個別オブジェクトランダム配置.lua"
+
+[release]
+output_dir = "release"
