@@ -1,13 +1,31 @@
---track@count:個数,1,1000,5,1
---track@wx:X軸範囲,0,10000,1000,0.01
---track@wy:Y軸範囲,0,10000,1000,0.01
---track@wz:Z軸範囲,0,10000,0,0.01
---track@rx:X回転角,0,180,0,0.01
---track@ry:Y回転角,0,180,0,0.01
---track@rz:Z回転角,0,180,180,0.01
---track@s_min:縮小最小[%],0,100,100,0.01
---track@ran:乱数,0,1000,0,1
 --information:個別オブジェクトをランダム配置する
+
+---$track:個数, min = 1, max = 1000, step = 1
+local count = 5
+
+---$track:X軸範囲, min = 0, max = 10000, step = 0.01
+local wx = 1000
+
+---$track:Y軸範囲, min = 0, max = 10000, step = 0.01
+local wy = 1000
+
+---$track:Z軸範囲, min = 0, max = 10000, step = 0.01
+local wz = 0
+
+---$track:X回転角, min = 0, max = 180, step = 0.01
+local rx = 0
+
+---$track:Y回転角, min = 0, max = 180, step = 0.01
+local ry = 0
+
+---$track:Z回転角, min = 0, max = 180, step = 0.01
+local rz = 180
+
+---$track:縮小最小[%], min = 0, max = 100, step = 0.01
+local s_min = 100
+
+---$track:乱数, min = 0, max = 1000, step = 1
+local ran = 0
 
 obj.effect()
 obj.multiobject(count, function()

@@ -5,16 +5,21 @@ id = "pexisgle_script"
 name = "pexisgle-script"
 version = "0.1.0"
 
+[build_group]
+aulua = "aulua build"
+
 [development]
 aviutl2_version = "latest"
 
 [artifacts.t_script-anm2]
 destination = "Script/pexisgle/ランダム色で登場.anm2"
-source = "src/ランダム色で登場.lua"
+source = "build/ランダム色で登場.anm2"
+build = { group = "aulua" }
 
 [artifacts.random_placement-anm2]
 destination = "Script/pexisgle/個別オブジェクトランダム配置.anm2"
-source = "src/個別オブジェクトランダム配置.lua"
+source = "build/個別オブジェクトランダム配置.anm2"
+build = { group = "aulua" }
 
 [release]
 output_dir = "release"

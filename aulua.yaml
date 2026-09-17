@@ -1,0 +1,13 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/karoterra/aviutl2-aulua/refs/heads/main/schema/aulua.schema.json
+project:
+  variables:
+    AUTHOR: pexisgle
+build:
+  out_dir: build
+scripts:
+  - name: ランダム色で登場.anm2
+    sources:
+      - path: src/ランダム色で登場.lua
+  - name: 個別オブジェクトランダム配置.anm2
+    sources:
+      - path: src/個別オブジェクトランダム配置.lua

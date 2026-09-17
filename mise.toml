@@ -1,2 +1,13 @@
 [tools]
-"cargo:aviutl2-cli" = "latest"
+"github:karoterra/aviutl2-aulua" = "latest"
+"github:sevenc-nanashi/aviutl2-cli" = { version = "latest", bin = "au2.exe" }
+stylua = "latest"
+
+[settings]
+experimental = true
+
+[tasks.build]
+run = ["aulua build"]
+
+[tasks.watch]
+run = ["mise watch -w aulua.yaml -w src -e yaml,lua build"]
