@@ -26,5 +26,10 @@ destination = "Script/pexisgle/個別オブジェクト特定番目表示.anm2"
 source = "build/個別オブジェクト特定番目表示.anm2"
 build = { group = "aulua" }
 
+[artifacts.nth_part-anm2]
+destination = "Script/pexisgle/分解パーツ特定番目表示.anm2"
+source = "build/分解パーツ特定番目表示.anm2"
+build = { group = "aulua" }
+
 [release]
 output_dir = "release"

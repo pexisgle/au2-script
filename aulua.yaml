@@ -14,3 +14,6 @@ scripts:
   - name: 個別オブジェクト特定番目表示.anm2
     sources:
       - path: src/個別オブジェクト特定番目表示.lua
+  - name: 分解パーツ特定番目表示.anm2
+    sources:
+      - path: src/分解パーツ特定番目表示.lua
