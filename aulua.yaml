@@ -11,3 +11,6 @@ scripts:
   - name: 個別オブジェクトランダム配置.anm2
     sources:
       - path: src/個別オブジェクトランダム配置.lua
+  - name: 個別オブジェクト特定番目表示.anm2
+    sources:
+      - path: src/個別オブジェクト特定番目表示.lua

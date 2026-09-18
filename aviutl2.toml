@@ -21,5 +21,10 @@ destination = "Script/pexisgle/個別オブジェクトランダム配置.anm2"
 source = "build/個別オブジェクトランダム配置.anm2"
 build = { group = "aulua" }
 
+[artifacts.nth_object-anm2]
+destination = "Script/pexisgle/個別オブジェクト特定番目表示.anm2"
+source = "build/個別オブジェクト特定番目表示.anm2"
+build = { group = "aulua" }
+
 [release]
 output_dir = "release"
