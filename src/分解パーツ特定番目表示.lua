@@ -145,8 +145,29 @@ local function part_name(id, index)
     return "cache:pexisgle_np_" .. id .. "_p" .. tostring(index)
 end
 
+local function ready_name(id)
+    return "cache:pexisgle_np_" .. id .. "_ok"
+end
+
 local function global_name(id)
     return "pexisgle_np_" .. id
+end
+
+local function restore_self()
+    return obj.copybuffer("object", "cache:pexisgle_np_self") == true
+end
+
+local function buffer_exists(name)
+    local ok, result = pcall(obj.copybuffer, "cache:pexisgle_np_probe", name)
+    return ok and result == true
+end
+
+local function mark_ready(id)
+    obj.clearbuffer(ready_name(id), 1, 1)
+end
+
+local function is_ready(id)
+    return buffer_exists(ready_name(id))
 end
 
 local function serialize_parts(parts)
@@ -227,9 +248,12 @@ end
 
 local function destruct_entry(id, quantize_x_int, quantize_y_int, quantize_shift_x_int, quantize_shift_y_int)
     local internal = load_disassembler()
-    obj.copybuffer("object", "cache:pexisgle_np_self")
-    obj.copybuffer(source_name(id), "object")
+    restore_self()
     local data, source_width, source_height = obj.getpixeldata("object")
+    if type(source_width) ~= "number" or type(source_height) ~= "number" or source_width < 1 or source_height < 1 then
+        return { parts = {}, sw = 0, sh = 0 }
+    end
+    obj.copybuffer(source_name(id), "object")
     obj.clearbuffer(atlas_name(id), source_width, source_height)
     local return_data, _, _ = obj.getpixeldata(atlas_name(id))
     local num_parts = internal.destruct(
@@ -269,6 +293,7 @@ local function destruct_entry(id, quantize_x_int, quantize_y_int, quantize_shift
         }
     end
     internal.dispose(obj.effect_id)
+    mark_ready(id)
     return {
         parts = parts,
         sw = source_width,
@@ -276,23 +301,33 @@ local function destruct_entry(id, quantize_x_int, quantize_y_int, quantize_shift
     }
 end
 
+local function persist_entry(id, entry)
+    if not entry or not entry.parts or #entry.parts == 0 then
+        return
+    end
+    frame_entries()[id] = entry
+    store_global(id, entry)
+end
+
 local function ensure_entry(id, quantize_x_int, quantize_y_int, quantize_shift_x_int, quantize_shift_y_int)
     local entries = frame_entries()
     local entry = entries[id] or load_global(id)
-    if entry then
+    if entry and #entry.parts > 0 and is_ready(id) then
         entries[id] = entry
         return entry
     end
     entry = destruct_entry(id, quantize_x_int, quantize_y_int, quantize_shift_x_int, quantize_shift_y_int)
-    entries[id] = entry
-    store_global(id, entry)
+    persist_entry(id, entry)
     return entry
 end
 
 local function extract_part(id, entry, part, index)
+    if not is_ready(id) then
+        return false
+    end
     local cached_part = part_name(id, index)
-    if obj.copybuffer("object", cached_part) then
-        return true
+    if buffer_exists(cached_part) then
+        return obj.copybuffer("object", cached_part) == true
     end
     local ok = pcall(function()
         obj.clearbuffer(cached_part, part.w, part.h)
@@ -309,6 +344,9 @@ local function extract_part(id, entry, part, index)
             error("copy part")
         end
     end)
+    if not ok then
+        restore_self()
+    end
     return ok
 end
 
@@ -330,6 +368,7 @@ local function apply_position(entry, part, oobj)
 end
 
 local function hide()
+    restore_self()
     obj.setoption("draw_state", true)
 end
 
@@ -356,10 +395,8 @@ end
 
 if not extract_part(id, entry, part, n) then
     frame_entries()[id] = nil
-    global[global_name(id)] = nil
     entry = destruct_entry(id, quantize_x_int, quantize_y_int, quantize_shift_x_int, quantize_shift_y_int)
-    frame_entries()[id] = entry
-    store_global(id, entry)
+    persist_entry(id, entry)
     part = entry.parts[n]
     if not part or not extract_part(id, entry, part, n) then
         hide()
@@ -367,4 +404,5 @@ if not extract_part(id, entry, part, n) then
     end
 end
 
+obj.setoption("draw_state", false)
 apply_position(entry, part, oobj)
